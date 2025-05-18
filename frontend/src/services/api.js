@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -39,8 +39,8 @@ api.interceptors.response.use(
 // Auth endpoints
 export const login = async (credentials) => {
   try {
-  const response = await api.post('/auth/login', credentials);
-  return response.data;
+    const response = await api.post('/auth/login', credentials);
+    return response.data;
   } catch (error) {
     if (error.response) {
       throw error;
@@ -158,7 +158,7 @@ export const getTransactionRequests = async () => {
     const token = localStorage.getItem('token');
     console.log('Token for requests:', token ? 'Exists' : 'Missing');
     
-  const response = await api.get('/transactions/requests');
+    const response = await api.get('/transactions/requests');
     console.log('Received transaction requests:', response.data);
     
     if (!Array.isArray(response.data)) {
@@ -166,7 +166,7 @@ export const getTransactionRequests = async () => {
       return [];
     }
     
-  return response.data;
+    return response.data;
   } catch (error) {
     console.error('Error fetching transaction requests:', {
       message: error.message,
